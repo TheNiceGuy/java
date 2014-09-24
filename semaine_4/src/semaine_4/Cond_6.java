@@ -4,7 +4,7 @@ import javax.swing.JOptionPane;
 
 public class Cond_6 {
 	public static void main(String[] args) {
-		final String FORMAT[] = {"###-####", "###-###-####", "(###)###-####", "(###) ###-####"};
+		final String FORMAT[] = {"###-####", "##########","###-###-####", "(###)###-####", "(###) ###-####"};
 		
 		String strNumero;
 		int i;
@@ -14,23 +14,14 @@ public class Cond_6 {
 		
 		//déterminer le format utilisé
 		iFormat = 0;
-		switch(strNumero.length()) {
-			case  8:
-				iFormat = 0; break;
-			case 12:
-				iFormat = 1; break;
-			case 13:
-				iFormat = 2; break;
-			case 14:
-				iFormat = 3; break;
-			default:
-				JOptionPane.showMessageDialog(null, "NON-VALIDE");
-				System.exit(1);
+		for(i = 0; i<5; i++) {
+			if(strNumero.length() == FORMAT[i].length())
+				iFormat = i;
 		}
 		
 		//tester la validité du numéro entré avec le format
 		for(i = 0; i<strNumero.length(); i++) {
-			//si le format à telle position est un chiffre
+			//si le charactère doit être un chiffre
 			if(FORMAT[iFormat].charAt(i) == '#') {
 				switch(strNumero.charAt(i)) {
 					case '1':

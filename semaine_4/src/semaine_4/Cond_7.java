@@ -2,19 +2,19 @@ package semaine_4;
 
 import javax.swing.JOptionPane;
 
-public class Cond_5 {
+public class Cond_7 {
 	public static void main(String[] args) {
-		final String FORMAT[] = {"#########", "###?###?###"};
+		final String FORMAT[] = {"###-####", "##########","###-###-####", "(###)###-####", "(###) ###-####"};
 		
 		String strNumero;
 		int i;
 		int iFormat;
 		
-		strNumero = JOptionPane.showInputDialog("Numéro d'assurance social:");
+		strNumero = JOptionPane.showInputDialog("Numéro de téléphone:");
 		
 		//déterminer le format utilisé
 		iFormat = 0;
-		for(i = 0; i<2; i++) {
+		for(i = 0; i<5; i++) {
 			if(strNumero.length() == FORMAT[i].length())
 				iFormat = i;
 		}
@@ -39,17 +39,10 @@ public class Cond_5 {
 						JOptionPane.showMessageDialog(null, "NON-VALIDE");
 						System.exit(1);							
 				}
-			//si le format à telle position est une espace
-			} else if((FORMAT[iFormat].charAt(i) == '?')) {
-				switch(strNumero.charAt(i)) {
-					case '-':
-					case ' ':
-					case '/':
-						break;
-					default:
-						JOptionPane.showMessageDialog(null, "NON-VALIDE");
-						System.exit(1);	
-				}
+			//si le charactère est équivalent à celle du format
+			} else if(FORMAT[iFormat].charAt(i) != strNumero.charAt(i)){
+				JOptionPane.showMessageDialog(null, "NON-VALIDE");
+				System.exit(1);					
 			}
 		}
 		
