@@ -10,7 +10,7 @@ public class Cond_7 {
 		int i, j;
 		boolean bValid;
 		
-		strNumero = JOptionPane.showInputDialog("Numéro de téléphone:");
+		strNumero = JOptionPane.showInputDialog("Numéro de matricule:");
 		
 		for(i = 0, bValid = false; i<4; i++) {
 			//vérifier si la longuer respect celle d'un format
