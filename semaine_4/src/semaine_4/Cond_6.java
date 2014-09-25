@@ -4,50 +4,58 @@ import javax.swing.JOptionPane;
 
 public class Cond_6 {
 	public static void main(String[] args) {
-		final String FORMAT[] = {"###-####", "##########","###-###-####", "(###)###-####", "(###) ###-####"};
+		final String FORMAT[] = {"(###)###-####", "(###) ###-####", "###-###-####","###-####", "##########"};
 		
 		String strNumero;
-		int i;
-		int iFormat;
+		int i, j;
+		boolean bValid;
 		
 		strNumero = JOptionPane.showInputDialog("Numéro de téléphone:");
 		
-		//déterminer le format utilisé
-		iFormat = 0;
-		for(i = 0; i<5; i++) {
+		for(i = 0, bValid = false; i<5; i++) {
+			//vérifier si la longuer respect celle d'un format
 			if(strNumero.length() == FORMAT[i].length())
-				iFormat = i;
-		}
-		
-		//tester la validité du numéro entré avec le format
-		for(i = 0; i<strNumero.length(); i++) {
-			//si le charactère doit être un chiffre
-			if(FORMAT[iFormat].charAt(i) == '#') {
-				switch(strNumero.charAt(i)) {
-					case '1':
-					case '2':
-					case '3':
-					case '4':
-					case '5':
-					case '6':
-					case '7':
-					case '8':
-					case '9':
-					case '0':
-						break;
-					default:
-						JOptionPane.showMessageDialog(null, "NON-VALIDE");
-						System.exit(1);							
+				for(j = 0; j<strNumero.length(); j++) {
+					//System.out.print(FORMAT[i].charAt(j)+" "+strNumero.charAt(j)+" ");
+					//tester si un charactère doit être un chiffre
+					if(FORMAT[i].charAt(j) == '#') {
+						switch(strNumero.charAt(j)) {
+							case '1':
+							case '2':
+							case '3':
+							case '4':
+							case '5':
+							case '6':
+							case '7':
+							case '8':
+							case '9':
+							case '0':
+								bValid = true; break;
+							default:
+								//sinon, sortir de la boucle
+								bValid = false;
+								j = strNumero.length(); break;
+						}
+					//tester si un charactère doit être quelque chose d'autre
+					} else if(FORMAT[i].charAt(j) == strNumero.charAt(j)) {
+						bValid = true;
+					//sinon, sortir de la boucle
+					} else {
+						bValid = false;
+						j = strNumero.length();
+					}
+					//System.out.print(bValid+"\n");
 				}
-			//si le charactère est équivalent à celle du format
-			} else if(FORMAT[iFormat].charAt(i) != strNumero.charAt(i)){
-				JOptionPane.showMessageDialog(null, "NON-VALIDE");
-				System.exit(1);					
-			}
+				//si bValid est true, le numéro est valide et on peut partir
+				if(bValid)
+					i = strNumero.length();
 		}
 		
 		//afficher la réponse
-		JOptionPane.showMessageDialog(null, "VALIDE");
+		if(bValid)
+			JOptionPane.showMessageDialog(null, "VALIDE");
+		else
+			JOptionPane.showMessageDialog(null, "NON-VALIDE");
 		System.exit(0);
 	}
 }
