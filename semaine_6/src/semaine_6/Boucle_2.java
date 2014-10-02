@@ -4,6 +4,7 @@ import javax.swing.JOptionPane;
 
 public class Boucle_2 {
 	public static void main(String[] args) {
+		//entrez dans la boucle principale
 		loop();
 		
 		System.exit(0);
@@ -12,6 +13,7 @@ public class Boucle_2 {
 	private static void loop() {
 		int quit;
 		
+		//boucler tant et aussi longtemps que le joueur n'a pas quitté
 		quit = 0;
 		while(quit != 1) {
 			JOptionPane.showMessageDialog(null, "Note: Ne tenez pas compte de la priorité des opérations\n"+calcul());
@@ -23,6 +25,7 @@ public class Boucle_2 {
 	}
 	
 	private static String calcul() {
+		//cette fonction crée une équation et le calcul
 		String calcul;
 		int nombre;
 		double resultat = 0;
@@ -30,10 +33,14 @@ public class Boucle_2 {
 		
 		operation op;
 		
+		//demander le premier opérande
 		calcul = ""+(int)(resultat = getOperande(""));
+		//boucler tant et aussi longtemps que l'équation n'est pas fini
+		//ou s'il n'y a pas de division par zéro
 		quit = false;
 		op = operation.FIN;
 		while(!quit?(op = getOperateur(calcul)) != operation.FIN:!quit) {
+			//déterminer la prochaine opération
 			switch(op) {
 			case FIN: break;
 			case ADDITION: calcul += "+"; break;
@@ -42,8 +49,10 @@ public class Boucle_2 {
 			case DIVISION: calcul += "/"; break;
 			}
 			
+			//demander la prochain opérande
 			nombre = getOperande(calcul);
 			
+			//ajouter le nouvel opérande dans l'équation
 			switch(op) {
 			case FIN: break;
 			case ADDITION: 
@@ -56,6 +65,7 @@ public class Boucle_2 {
 				calcul += nombre;
 				resultat *= nombre; break;
 			case DIVISION:
+				//s'il y a une division par zéro, quitter
 				if(nombre != 0) {
 					calcul += nombre;
 					resultat /= nombre;
@@ -65,6 +75,7 @@ public class Boucle_2 {
 				}
 			}
 		}
+		//s'il n'y a pas eu de division par zéro, finaliser l'équation
 		if(!quit)
 			calcul += "="+resultat;
 		
@@ -72,6 +83,7 @@ public class Boucle_2 {
 	}
 	
 	private static int getOperande(String equation) {
+		//cette fonction retourne une opérande (nombre) et affiche l'équation actuelle
 		int op;
 		boolean quit;
 		
@@ -91,6 +103,7 @@ public class Boucle_2 {
 	}
 	
 	private static operation getOperateur(String equation) {
+		//cette fonction retourne un opérateur et affiche l'équation actuelle
 		final String menu[] = {"=", "/", "*", "-", "+"};
 		int choix;
 		
