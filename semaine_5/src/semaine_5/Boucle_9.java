@@ -24,7 +24,7 @@ public class Boucle_9 {
 		quit = false;
 		while(!quit) {
 			choix = JOptionPane.showOptionDialog(
-						null, "Que voulez vou faire?", "Opération arithmétique",
+						null, "Que voulez-vous faire?", "Opération arithmétique",
 						JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, 
 						menu, menu[2]);
 			
@@ -73,6 +73,8 @@ public class Boucle_9 {
 		switch(type) {
 		case     ADDITION: rep[0] = a+b; break;
 		case SOUSTRACTION: rep[0] = a-b; break;
+		case MULTIPLICATION: break;
+		case DIVISION: break;
 		}
 		
 		//demander la réponse, le joueur à plusieurs chance
@@ -85,7 +87,7 @@ public class Boucle_9 {
 			}
 			//augmenter le nombre de faute si une mauvaise réponse est entré
 			else {
-				JOptionPane.showMessageDialog(null, "Désolé, vous n'avez pas la bonne réponse");
+				JOptionPane.showMessageDialog(null, "Désolé, vous n'avez pas la bonne réponse.");
 				faute++;
 			}
 		}
@@ -100,6 +102,8 @@ public class Boucle_9 {
 	
 	private enum mode {
 		ADDITION,
-		SOUSTRACTION
+		SOUSTRACTION,
+		MULTIPLICATION,
+		DIVISION
 	}
 }

@@ -14,14 +14,14 @@ public class Boucle_1 {
 		int iSomme[] = new int[3];
 		int i;
 		
-		//summation des entiers en [0, 20]
+		//sommation des entiers en [0, 20]
 		for(i = SOMME1MIN, iSomme[0] = 0; i <= SOMME1MAX; i++){
 			System.out.print(i+"\n");
 			iSomme[0] += i;
 		}
 		JOptionPane.showMessageDialog(null, "Somme de "+SOMME1MIN+" à "+SOMME1MAX+" = "+iSomme[0]);
 		
-		//summation des entiers pairs en [21, 50]
+		//sommation des entiers pairs en [21, 50]
 		for(i = SOMME2MIN, iSomme[1] = 0; i <= SOMME2MAX; i++){
 			if(i%2 == 0) {
 				System.out.print(i+"\n");
@@ -30,7 +30,7 @@ public class Boucle_1 {
 		}
 		JOptionPane.showMessageDialog(null, "Somme pair de "+SOMME2MIN+" à "+SOMME2MAX+" = "+iSomme[1]);
 		
-		//summation des entiers impairs en [51, 100]
+		//sommation des entiers impairs en [51, 100]
 		for(i = SOMME3MIN, iSomme[2] = 0; i <= SOMME3MAX; i++){
 			if(i%2 == 1) {
 				System.out.print(i+"\n");
