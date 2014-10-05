@@ -13,6 +13,7 @@ public class Boucle_1 {
 		Banque compte = new Banque(1000);
 		NumberFormat argent = NumberFormat.getCurrencyInstance();
 		
+		//boucler tant et aussi longtemps que l'utilisateur n'a pas quitté
 		quit = false;
 		while(!quit) {
 			choix = JOptionPane.showOptionDialog(

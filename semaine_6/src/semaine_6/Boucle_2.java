@@ -4,7 +4,6 @@ import javax.swing.JOptionPane;
 
 public class Boucle_2 {
 	public static void main(String[] args) {
-		//entrez dans la boucle principale
 		loop();
 		
 		System.exit(0);
@@ -13,7 +12,6 @@ public class Boucle_2 {
 	private static void loop() {
 		int quit;
 		
-		//boucler tant et aussi longtemps que le joueur n'a pas quitté
 		quit = 0;
 		while(quit != 1) {
 			JOptionPane.showMessageDialog(null, "Note: Ne tenez pas compte de la priorité des opérations\n"+calcul());
@@ -27,14 +25,14 @@ public class Boucle_2 {
 	private static String calcul() {
 		//cette fonction crée une équation et le calcul
 		String calcul;
-		int nombre;
+		double nombre;
 		double resultat = 0;
 		boolean quit;
 		
 		operation op;
 		
 		//demander le premier opérande
-		calcul = ""+(int)(resultat = getOperande(""));
+		calcul = ""+(resultat = getOperande(""));
 		//boucler tant et aussi longtemps que l'équation n'est pas fini
 		//ou s'il n'y a pas de division par zéro
 		quit = false;
@@ -82,16 +80,16 @@ public class Boucle_2 {
 		return calcul;
 	}
 	
-	private static int getOperande(String equation) {
+	private static double getOperande(String equation) {
 		//cette fonction retourne une opérande (nombre) et affiche l'équation actuelle
-		int op;
+		double op;
 		boolean quit;
 		
 		op = 0;
 		quit = false;
 		while(quit != true)
 		    try { 
-		    	op = Integer.parseInt(JOptionPane.showInputDialog("Veuillez entrer une opérande:\n"+equation));
+		    	op = Double.parseDouble(JOptionPane.showInputDialog("Veuillez entrer une opérande:\n"+equation));
 		    	quit = true;
 		    } catch(NumberFormatException except) {
 		    	JOptionPane.showMessageDialog(null, "Ceci n'est pas un nombre!", "Calculatrice",
