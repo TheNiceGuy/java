@@ -32,10 +32,10 @@ public class Jeu {
 		do {
 			min = getNumber("Borne inférieur:");
 			max = getNumber("Borne supérieur:");
-			if(min < max)
+			if(min > max)
 				JOptionPane.showMessageDialog(null, "La borne inférieur doit être plus petit que la borne supérieur!",
 				                              "Jeu", JOptionPane.ERROR_MESSAGE, null);
-		} while(min < max);
+		} while(min > max);
 		number = generate(min, max);
 
 		game(1, number, min, max, clue.EASY);

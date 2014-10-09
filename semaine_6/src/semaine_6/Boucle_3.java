@@ -17,7 +17,7 @@ public class Boucle_3 {
 		
 		Jeu jeu = new Jeu();
 		
-		quit = 0;
+		quit = -1;
 		do {
 			choix = JOptionPane.showOptionDialog(
 					null, "Quelle action voulez-vous faire?", "Banque",
@@ -31,7 +31,7 @@ public class Boucle_3 {
 			case 3: jeu.superieur();      break;
 			case 4: jeu.predefini();      break;
 			}
-		} while(quit == 0);
+		} while(quit == -1);
 		
 		JOptionPane.showMessageDialog(null, "Vous avez faites "+quit+" "+(quit>1?"parties":"partie")+".");
 	}
