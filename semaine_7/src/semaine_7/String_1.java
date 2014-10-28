@@ -6,15 +6,50 @@ public class String_1 {
 	public static void main(String[] args) {
 		final int NOMBRE =  5;
 		
+		findNumero();
+		
 		String numero;
 		int i;
+		int j;
 		
 		for(i = 0; i < NOMBRE; i++) {	
 			numero = genNumero();
-			System.out.print(numero+"->"+(isNumero(numero)==true?"valide":"non-valide")+"\n");
+			for(j = 0; j < TAILLE; j++) {
+				System.out.print(numero.charAt(j));
+				if(j == 2 || j == 5)
+					System.out.print(" ");
+			}
+			System.out.print(" -> "+(isNumero(numero)==true?"valide":"non-valide")+"\n");
 		}
 		
 		System.exit(0);
+	}
+	
+	private static void findNumero() {
+		String numero;
+		int pow;
+		int i;
+		int j;
+		
+		
+		for(i = 0; i < 999999999; i++) {
+			numero = "";
+			pow = getPower(i)-1;
+			for(j = 1; j < 9-pow; j++)
+				numero += '0';
+			numero += i;
+			System.out.print(numero+" -> "+(isNumero(numero)==true?"valide":"non-valide")+"\n");
+		}
+	}
+	
+	private static int getPower(int nbr) {
+		int i;
+		
+		i = 1;
+		while(nbr%Math.pow(10, i) != nbr)
+			i++;
+		
+		return i;
 	}
 
 	private static int sumString(String numero) {

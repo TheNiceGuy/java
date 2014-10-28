@@ -10,7 +10,7 @@ public class Boucle_1 {
 		int choix;
 		boolean quit;
 		
-		Banque compte = new Banque(1000);
+		Banque compte = new Banque(0);
 		NumberFormat argent = NumberFormat.getCurrencyInstance();
 		
 		//boucler tant et aussi longtemps que l'utilisateur n'a pas quitté

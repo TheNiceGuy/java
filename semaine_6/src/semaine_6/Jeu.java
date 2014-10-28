@@ -11,11 +11,23 @@ public class Jeu {
 	private int game = 0;
 	
 	public void stats() {
+		int low;
+		int i;
+		
+		low = erreur[1];
+		for(i = 0; i < 3; i++)
+			if(erreur[i] <= low)
+				low = erreur[i]; 
+
 		JOptionPane.showMessageDialog(null,
 				"Niveau prédéfini: "+erreur[0]+" "+(erreur[0]>1?"erreurs":"erreur")+"\n"+
 				"Niveau personnalisé: "+erreur[1]+" "+(erreur[1]>1?"erreurs":"erreur")+"\n"+
 				"Niveau supérieur: "+erreur[2]+" "+(erreur[2]>1?"erreurs":"erreur")+"\n\n"+
-				"");
+				"Votre meilleur record à "+low+" "+(low>1?"erreurs":"erreur"));
+	}
+	
+	public int getGame() {
+		return game;
 	}
 	
 	public void predefini() {
@@ -29,13 +41,14 @@ public class Jeu {
 		int min, max;
 		int number;
 		
-		do {
+		min = getNumber("Borne inférieur:");
+		max = getNumber("Borne supérieur:");
+		while(min >= max) {
+			JOptionPane.showMessageDialog(null, "La borne inférieur doit être plus petite que la borne supérieur!",
+                    "Jeu", JOptionPane.ERROR_MESSAGE, null);
 			min = getNumber("Borne inférieur:");
 			max = getNumber("Borne supérieur:");
-			if(min > max)
-				JOptionPane.showMessageDialog(null, "La borne inférieur doit être plus petit que la borne supérieur!",
-				                              "Jeu", JOptionPane.ERROR_MESSAGE, null);
-		} while(min > max);
+		}
 		number = generate(min, max);
 
 		game(1, number, min, max, clue.EASY);
@@ -56,23 +69,29 @@ public class Jeu {
 	
 	private int game(int niveau, int answer, int min, int max, clue type) {
 		int number;
+		boolean success;
 		
 		game++;
-		
+		success = true;
 		number = getNumber("Devinez le nombre:");
 		while(number != answer) {
 			erreur[niveau]++;
 			
 			switch(type) {
 			case EASY:
-				if(number < answer) {
-					min = (number<min)?min:number;
-					JOptionPane.showMessageDialog(null, "Le nombre généré est plus grand, soit entre "+min+" et "+max+" inclusivement.");
+				if(number < answer)
+					min = (number<min)?min:number+1;
+				else
+					max = (number>max)?max:number-1;
+				
+				if(min != max) {
+					JOptionPane.showMessageDialog(null, "Le nombre généré est "
+								+(number < answer?"plus grand":"plus petit")
+								+", soit entre "+min+" et "+max+" inclusivement.");
 				} else {
-					max = (number>max)?max:number;
-					JOptionPane.showMessageDialog(null, "Le nombre généré est plus petit, soit entre "+min+" et "+max+" inclusivement.");
-				}
-				break;
+					number  = answer;
+					success = false;
+				} break;
 			case HARD:
 				if(number < answer)
 					JOptionPane.showMessageDialog(null, "Le nombre généré est plus grand.");
@@ -80,9 +99,14 @@ public class Jeu {
 					JOptionPane.showMessageDialog(null, "Le nombre généré est plus petit.");
 				break;
 			}
-			number = getNumber("Devinez le nombre:");
+			if(number != answer)
+				number = getNumber("Devinez le nombre:");
 		}
-		JOptionPane.showMessageDialog(null, "Félicitations, vous avez trouvé le nombre généré.");
+		
+		if(success)
+			JOptionPane.showMessageDialog(null, "Félicitations, vous avez trouvé le nombre généré.");
+		else
+			JOptionPane.showMessageDialog(null, "Le nombre était "+number+".");
 		
 		return 0;
 	}
@@ -106,10 +130,6 @@ public class Jeu {
 		} while(done != true);
 		    
 		return iNumber;
-	}
-	
-	public int getGame() {
-		return game;
 	}
 	
 	private static int generate(int min, int max) {
