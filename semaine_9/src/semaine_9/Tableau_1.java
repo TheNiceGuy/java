@@ -1,0 +1,102 @@
+package semaine_9;
+
+import javax.swing.JOptionPane;
+
+/* 
+ * Fichier     : Tableau_1.java
+ * Project     : Laboratoires sur les tableaux
+ * Objectifs   : Gestion du nombre de journées de maladie accumulées du personel
+ * Logiciel    : Eclipse Mars, OpenJDK 1.8
+ * Plateforme  : Archlinux, Linux 3.18.0-rc2+ x86_64 GNU/Linux
+ * Auteur      : Gabriel-Andrew Pollo Guilbert
+ * Création    : 28 Octobre 2014
+ */
+
+public class Tableau_1 {
+	public static void main(String[] args) {
+		final int PSUPNB  = 10; // nombre de journée précis supérieur
+		final int EXACTNB =  8; // nombre de journée précis
+		
+		// tableau contenant les informations des employés
+		String nom[] = {"Benoit", "Alice", "Daniel", "Emile", "Julien"};
+		int numero[] = { 20,       10,      40,       50,      80     };
+		int malade[] = { 18,        8,      10,       11,       8     };
+		
+		int i;               // contient un compteur
+		int taille;          // contient le nombre d'employé
+		int sommeP      = 0; // contient la somme des journées des employés avec plus de N jours
+		int min         = 0; // contient l'index de l'employé avec le moins de jours
+		int max         = 0; // contient l'index de l'employé avec le plus de jours
+		int maladeE     = 0; // contient l'index de l'employé avec un nombre N de jours
+		int nombre;          // contient un nombre entré par l'utilisateur
+		int index       = 0; // contient l'index de l'employé demandé
+		double moyenne  = 0; // contient la moyenne de jours de tous les employés
+		double moyenneP = 0; // contient la moyenne de jours des employés avec plus de N jours
+
+		taille = nom.length;
+		
+		for(i = 0; i < taille; i++) {
+			// somme des journées des employés avec plus de N jours
+			if(malade[i] >= PSUPNB)
+				sommeP++;
+			
+			// somme de la moyenne des journées des employés avec plus de N jours
+			if(malade[i] < PSUPNB)
+				moyenneP += malade[i]; 
+			
+			// somme de la moyenne des journées de tous les employées
+			moyenne += malade[i];
+			
+			// trouver l'index de l'employé avec le moins de jours
+			if(malade[i] < malade[min])
+				min = i;
+
+			// trouver l'index de l'employé avec le plus de jours
+			if(malade[i] > malade[max])
+				max = i;
+			
+			// trouver le premier index d'un employé avec un nombre N de jours
+			if(maladeE == 0 && malade[i] == EXACTNB)
+				maladeE = i;
+		}
+		// diviser les moyennes
+		moyenne  /= taille;
+		moyenneP /= taille;
+		
+		// demandé un numéro d'employé et trouvé son index
+		do {
+			nombre = Integer.parseInt(JOptionPane.showInputDialog("Veuillez entrez le numéro d'un employé."));
+			for(i = 0; i < taille; i++)
+				if(numero[i] == nombre) {
+					index = i;
+					i = taille;
+				}
+			
+			if(i == taille)
+				// message d'erreur si le numéro n'existe pas
+				JOptionPane.showMessageDialog(null, "L'employé #"+nombre+" n'est pas dans votre compagnie.\n");
+		}
+		while(i == taille);
+		
+		// afficher les résultats
+		System.out.print("Nombre d'employés ayant accumulé 10 journées de maladie ou plus: "+sommeP+"\n");
+		System.out.print("Moyenne du nombre de journées de maladie: "+moyenne+"\n");
+		System.out.print("Moyenne du nombre de journées de maladie de moins de 10 jours: "+moyenneP+"\n");
+		System.out.print("L'employé "+nom[max]+" (#"+numero[max]+") à le plus de journées de maladie d'accumulées: "+malade[max]+"\n");
+		System.out.print("L'étendue est de "+(malade[max]-malade[min])+"\n");
+		System.out.print("L'employé "+nom[maladeE]+" (#"+numero[maladeE]+") à "+malade[maladeE]+" journées de maladie\n");
+		System.out.print("L'employé "+nom[index]+" (#"+numero[index]+") à "+malade[index]+" journées de maladie\n");
+		
+		// quitter le programme
+		quit(0);
+	}
+	
+	/*
+	 * Si le programme doit se terminer en renvoyant 
+	 * une erreur et sans qu'il plante, cette fonction
+	 * est utilisé.
+	 */
+	private static void quit(int code) {
+		System.exit(code);
+	}
+}
