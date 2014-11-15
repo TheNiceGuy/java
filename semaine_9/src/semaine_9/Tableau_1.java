@@ -15,8 +15,8 @@ import java.text.DecimalFormat;
  */
 
 public class Tableau_1 {
-    final static String NOM = "Gestionnaire de journées de maladie";
-    final static String ERR  = "Annuler";
+    final static String NOM = "Journées de maladie"; // constante du nom de l'application
+    final static String ERR  = "Annuler";            // constante du code d'erreur si l'utilisateur annule
 
     public static void main(String[] args) {
         final String menu[] = {"Oui", "Non"};
@@ -133,7 +133,7 @@ public class Tableau_1 {
      * Elle s'assure que le chiffre est valide.
      */
     private static String getNumber(String text) {
-        int nombre   = 0;
+        int nombre   = 0;  // contient le nombre entré
         String choix = ""; // contient le texte entré par l'utilisateur
 
         do {

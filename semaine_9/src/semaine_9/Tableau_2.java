@@ -15,11 +15,10 @@ import java.text.NumberFormat;
  */
 
 public class Tableau_2 {
-    final static String NOM = "Gestionnaire de journées de maladie";
-    final static String ERR = "Annuler";
-
-    final static int MAX  = 72; // constante du maximum d'une note
-    final static int MIN  = 0;  // constante du minimum d'une note
+    final static String NOM = "Note";    // constante du nom de l'application
+    final static String ERR = "Annuler"; // constante du code d'erreur si l'utilisateur annule
+    final static int MIN  = 0;           // constante du minimum d'une note
+    final static int MAX  = 72;          // constante du maximum d'une note
 
     public static void main(String[] args) {
         final String menu[] = {"Oui", "Non"};
@@ -70,7 +69,6 @@ public class Tableau_2 {
             // demander une note, si l'utilisateur annule, le programme se termine
             input = getNumber("Veuillez entrer la note #"+(i+1)+":");
             if(input == ERR) return 1;
-
             note[i] = Integer.parseInt(input);
 
             // convertir la note comme un pourcentage
@@ -127,7 +125,7 @@ public class Tableau_2 {
      * et maximal. Elle s'assure que le chiffre est valide.
      */
     private static String getNumber(String text) {
-        int nombre   = 0;
+        int nombre   = 0;  // contient le nombre entré
         String choix = ""; // contient le texte entré par l'utilisateur
 
         do {

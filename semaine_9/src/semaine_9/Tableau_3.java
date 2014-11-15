@@ -15,13 +15,15 @@ import java.text.NumberFormat;
  */
 
 public class Tableau_3 {
-    final static String NOM   = "Compilateur de votes";
-    final static String ERR   = "Annuler";
+    final static String NOM   = "Vote";    // constante du nom de l'application
+    final static String ERR   = "Annuler"; // constante du code d'erreur si l'utilisateur annule
+                                           // constante du nom des candidats de l'élection
     final static String CAN[] = {"Monique Lagacé", "Myriam Laposte",  "Julien Lafrenière",
                                  "Alex Beaubien",  "Jules Laliberté", "Diana Montplaisir"};
-    final static int BUREAU   =  5; // constante du nombre de bureau
+    final static int BUREAU   =  5;        // constante du nombre de bureau
 
-	public static void main(String[] args) {
+
+    public static void main(String[] args) {
         final String menu[] = {"Oui", "Non"};
 
         int choix;
@@ -105,7 +107,7 @@ public class Tableau_3 {
     * Elle s'assure que le chiffre est valide.
     */
     private static String getVote(int bureau, int index) {
-        int nombre   = 0;
+        int nombre   = 0;  // contient le nombre entré
         String choix = ""; // contient le texte entré par l'utilisateur
 
         do {
