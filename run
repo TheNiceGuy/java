@@ -1,0 +1,5 @@
+#!/bin/bash
+
+javac -encoding utf8 -verbose -deprecation ./$1/src/$1/$2.java
+java -cp ./$1/src/ $1.$2 main
+rm -v ./$1/src/$1/*.class
