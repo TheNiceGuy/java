@@ -8,7 +8,7 @@ import java.text.NumberFormat;
  * Fichier     : Tableau_4.java
  * Project     : Laboratoires sur les tableaux
  * Objectifs   : Gestion des dossiers étudiants
- * Logiciel    : Eclipse Mars, OpenJDK 1.8
+ * Logiciel    : Vim, OpenJDK 1.8
  * Plateforme  : Archlinux, Linux 3.18.0-rc4+ x86_64 GNU/Linux
  * Auteur      : Gabriel-Andrew Pollo Guilbert
  * Création    : 11 Novembre 2014

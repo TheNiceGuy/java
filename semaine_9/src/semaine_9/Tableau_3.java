@@ -26,7 +26,7 @@ public class Tableau_3 {
     public static void main(String[] args) {
         final String menu[] = {"Oui", "Non"};
 
-        int choix;
+        int choix; // contient le choix de l'utilisateur dans le menu
 
         //boucler tant et aussi longtemps que l'utilisateur n'a pas quitté
         session();
