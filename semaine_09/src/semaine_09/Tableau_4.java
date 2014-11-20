@@ -1,4 +1,4 @@
-package semaine_9;
+package semaine_09;
 
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
@@ -24,6 +24,8 @@ public class Tableau_4 {
         final String menu[] = {"Quitter",     "Trier",    "Initialiser",
                                "Additionner", "Afficher", "Supprimer",
                                "Modifier",    "Ajouter"};
+
+        JOptionPane.showMessageDialog(null, "BIENVENUE DANS MON PROGRAMME");
 
         int tableau[]; // contient le tableau pour faire de la gestion
 
@@ -337,6 +339,8 @@ public class Tableau_4 {
     * et sans qu'il plante, cette fonction est utilisé.
     */
     private static void quit(int code) {
+        JOptionPane.showMessageDialog(null, "MERCI D'AVOIR UTILISÉ MON PROGRAMME");
+
         System.exit(code);
     }
 }

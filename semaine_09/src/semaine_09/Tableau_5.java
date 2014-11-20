@@ -1,4 +1,4 @@
-package semaine_9;
+package semaine_09;
 
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
@@ -27,6 +27,8 @@ public class Tableau_5 {
 
     public static void main(String[] args) {
         final String menu[] = {"Quitter", "Visualiser", "Supprimer", "Modifier", "Ajouter"};
+
+        JOptionPane.showMessageDialog(null, "BIENVENUE DANS MON PROGRAMME");
 
         int choix; // contient le choix de l'utilisateur dans le menu
 
@@ -401,6 +403,8 @@ public class Tableau_5 {
     * et sans qu'il plante, cette fonction est utilisé.
     */
     private static void quit(int code) {
+        JOptionPane.showMessageDialog(null, "MERCI D'AVOIR UTILISÉ MON PROGRAMME");
+
         System.exit(code);
     }
 }

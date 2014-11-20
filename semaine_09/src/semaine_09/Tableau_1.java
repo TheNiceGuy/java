@@ -1,4 +1,4 @@
-package semaine_9;
+package semaine_09;
 
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
@@ -20,6 +20,8 @@ public class Tableau_1 {
 
     public static void main(String[] args) {
         final String menu[] = {"Oui", "Non"};
+
+        JOptionPane.showMessageDialog(null, "BIENVENUE DANS MON PROGRAMME");
 
         int choix; // contient le choix de l'utilisateur dans le menu
 
@@ -63,7 +65,7 @@ public class Tableau_1 {
         int nombre;          // contient un nombre entré par l'utilisateur
         int index       = 0; // contient l'index de l'employé demandé
         double moyenne  = 0; // contient la moyenne de jours de tous les employés
-        double moyenneP = 0; // contient la moyenne de jours des employés avec plus de N jours
+        double moyenneM = 0; // contient la moyenne de jours des employés avec plus de N jours
 
         String resultat; // contient le message final
         String input;    // contient la valeur renvoyé par getNumber()
@@ -74,9 +76,9 @@ public class Tableau_1 {
             if(malade[i] >= PSUPNB)
                 sommeP++;
 
-            // somme de la moyenne des journées des employés avec plus de N jours
-            if(malade[i] < PSUPNB)
-                moyenneP += malade[i];
+            // somme de la moyenne des journées des employés avec moins de N jours
+            if(malade[i] >= PSUPNB)
+                moyenneM += malade[i];
 
             // somme de la moyenne des journées de tous les employées
             moyenne += malade[i];
@@ -95,7 +97,7 @@ public class Tableau_1 {
         }
         // diviser les moyennes
         moyenne  /= taille;
-        moyenneP /= taille;
+        moyenneM /= taille;
 
         // demandé un numéro d'employé et trouver son index
         do {
@@ -118,7 +120,7 @@ public class Tableau_1 {
         // afficher les résultats
         resultat  = "Il y a "+sommeP+" "+(sommeP>1?"employés":"employé")+" ayant accumulé 10 journées de maladie ou plus.\n";
         resultat += "La moyenne est de "+decimal.format(moyenne)+" "+(moyenne>1?"journées":"journée")+" de la maladie par employé.\n";
-        resultat += "La moyenne est de "+decimal.format(moyenneP)+" "+(moyenneP>1?"journées":"journée")+" de la maladie par employé ayant moins de 10 journées prises.\n";
+        resultat += "La moyenne est de "+decimal.format(moyenneM)+" "+(moyenneM>1?"journées":"journée")+" de la maladie par employé ayant moins de 10 journées prises.\n";
         resultat +=  nom[max]+" (#"+numero[max]+") a le plus de journées de maladie avec "+malade[max]+" "+(malade[max]>1?"journées":"journée")+" d'accumulées.\n";
         resultat += "L'étendue du nombre de journée de maladie est de "+(malade[max]-malade[min])+".\n";
         resultat +=  nom[maladeE]+" (#"+numero[maladeE]+") a exactment "+malade[maladeE]+" "+(malade[maladeE]>1?"journées":"journée")+" de maladie.\n\n";
@@ -163,6 +165,8 @@ public class Tableau_1 {
      * et sans qu'il plante, cette fonction est utilisé.
      */
     private static void quit(int code) {
+        JOptionPane.showMessageDialog(null, "MERCI D'AVOIR UTILISÉ MON PROGRAMME");
+
         System.exit(code);
     }
 }
