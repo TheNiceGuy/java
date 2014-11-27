@@ -1,9 +1,57 @@
 #!/bin/bash
+#
+# Copyright 2014 (c)
+# Gabriel-Andrew Pollo Guilbert
+#
+# This is a simple script that execute a specified
+# project in this repository. I use it to escape Eclipse
+# IDE because I use my own code editor.
+#
+# SYNTAX
+#
+# To run a single file:
+#     ./run <PROJECT> <PACKAGE> <FILE>
+#
+# If the package is the same as the project:
+#     ./run <PROJECT> - <FILE>
+#
+# To run a subproject with a makefile:
+#     ./run <PROJECT> <PACKAGE> <MAKEFILE COMMAND>
 
-javac -encoding utf8 -verbose -deprecation ./$1/src/$1/$2.java
-echo ""
+DIR=$(pwd)
+PROJECT=$1
+PACKAGE=$2
+FILE=$3
 
-java -cp ./$1/src/ $1.$2 main
+if [[ ! -d $PROJECT ]]; then
+	echo "ERROR: The specified project doesn't exist."
+	exit 1
+fi
 
-echo ""
-rm ./$1/src/$1/*.class
+if [[ $2 == '-' ]]; then
+	PACKAGE=$PROJECT
+fi
+
+if [[ ! -d $PROJECT/src/$PACKAGE ]]; then
+	echo "ERROR: The specified package doesn't exist."
+	exit 1
+fi
+
+if [[ -f $PROJECT/src/$PACKAGE/makefile ]]; then
+	cd $PROJECT/src/$PACKAGE
+
+	if [[ -n $3 ]]; then
+		make $3
+	else
+		make && make run
+	fi
+
+	cd $DIR
+elif [[ -f $PROJECT/src/$PACKAGE/$FILE.java ]]; then
+	javac -encoding utf8 -verbose -deprecation ./$PROJECT/src/$PACKAGE/$FILE.java
+	java -cp ./$PROJECT/src/ $PACKAGE.$FILE main
+else
+	echo "ERROR: The specified file doesn't exist."
+fi
+
+exit 0
