@@ -8,25 +8,24 @@ import java.io.*;
 
 public class DameFrame implements ActionListener {
     final private String NOM = "MLG Dame";
-    final private int X    = 8;
-    final private int Y    = 8;
-    final private int S[]  = {X, Y};
-    final private char P[] = {'X', 'O'};
-    final private char BL = ' ';
+    final private int X   = 8;
+    final private int Y   = 8;
+    final private int BL  = 0;
+    final private int S[] = { X, Y};
+    final private int P[] = {-1, 1};
 
     private GridLayout grid    = new GridLayout(X, Y);
     private JFrame frame       = new JFrame(NOM);
     private JPanel content     = new JPanel(grid);
     private JButton button[][] = new JButton[X][Y];
 
-    private char state[][] = new char[X][Y];
     private boolean isSelection = false;
-    private boolean playerTurn  = false;
+    private int state[][]  = new int[X][Y];
+    private int playerTurn = 0;
     private int xSelection = 0;
     private int ySelection = 0;
 
     private String iconToken[] = new String[2];
-
 
     public DameFrame() {
     }
@@ -72,7 +71,6 @@ public class DameFrame implements ActionListener {
         frame.setSize(1000,1000);
         frame.setLocationRelativeTo(null);
         frame.getContentPane().add(content);
-        //frame.setResizable(false);
 
         for(i = 0; i < X; i++) {
             for(j = 0; j < Y; j++) {
@@ -109,7 +107,7 @@ public class DameFrame implements ActionListener {
             if(pos[0] == xSelection && pos[1] == ySelection)
                 selectPlayerMovement();
             else {
-                if(state[pos[0]][pos[1]] == P[playerTurn?0:1]) {
+                if(state[pos[0]][pos[1]] == -P[playerTurn]) {
                     killToken(pos[0],pos[1]);
                     for(i = 0; i < 2; i++) {
                         delta[i] -= pos[i];
@@ -121,7 +119,6 @@ public class DameFrame implements ActionListener {
                         else if(pos[i] >= S[i]) {
                             pos[i] -= 2;
                         }
-
                     }
                 }
                 move(xSelection, ySelection, pos[0], pos[1]);
@@ -144,10 +141,7 @@ public class DameFrame implements ActionListener {
 
         button[xi][yi].setIcon(null);
 
-        if(state[xf][yf] == P[0])
-            button[xf][yf].setIcon(new ImageIcon(iconToken[0]));
-        else
-            button[xf][yf].setIcon(new ImageIcon(iconToken[1]));
+        button[xf][yf].setIcon(new ImageIcon(iconToken[playerTurn]));
     }
 
     private void killToken(int x, int y) {
@@ -162,9 +156,9 @@ public class DameFrame implements ActionListener {
 
         for(i = 0; i < X; i++) {
             for(j = 0; j < Y; j++) {
-                if((i == x-1 || i == x+1) &&
-                   (j == y-1 || j == y+1) &&
-                    state[i][j] != P[playerTurn?1:0])
+                if((i == x-1*P[playerTurn]) &&
+                  ((j == y-1) || (j == y+1)) &&
+                  state[i][j] != P[playerTurn])
                     button[i][j].setEnabled(true);
                 else
                     button[i][j].setEnabled(false);
@@ -179,16 +173,10 @@ public class DameFrame implements ActionListener {
 
         for(i = 0; i < X; i++) {
             for(j = 0; j < Y; j++) {
-                if(playerTurn == false)
-                    if(state[i][j] != P[0])
-                        button[i][j].setEnabled(false);
-                    else
-                        button[i][j].setEnabled(true);
+                if(state[i][j] != P[playerTurn])
+                    button[i][j].setEnabled(false);
                 else
-                    if(state[i][j] != P[1])
-                        button[i][j].setEnabled(false);
-                    else
-                        button[i][j].setEnabled(true);
+                    button[i][j].setEnabled(true);
             }
         }
     }
@@ -203,6 +191,6 @@ public class DameFrame implements ActionListener {
     }
 
     private void flipTurn() {
-        playerTurn = (playerTurn?false:true);
+        playerTurn = (playerTurn==0?1:0);
     }
 }
