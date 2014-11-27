@@ -12,5 +12,8 @@ $(EXEC):
 run:
 	java -cp .. $(PACKAGE).$(EXEC)
 
+build: $(EXEC)
+	jar -cf myJar.jar myApp
+
 clean:
 	rm -rf *.class
