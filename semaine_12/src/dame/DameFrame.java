@@ -20,10 +20,10 @@ public class DameFrame implements ActionListener {
     private JButton button[][] = new JButton[X][Y];
 
     private boolean isSelection = false;
-    private int state[][]  = new int[X][Y];
-    private int playerTurn = 0;
-    private int xSelection = 0;
-    private int ySelection = 0;
+    private int state[][]   = new int[X][Y];
+    private int playerTurn  = 0;
+    private int selection[] = new int[2];
+    private int lastToken[] = new int[2];
 
     private String iconToken[] = new String[2];
 
@@ -98,13 +98,13 @@ public class DameFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent event) {
-        int pos[] = getPos(event.getActionCommand());
-        int delta[] = {xSelection, ySelection};
+        int pos[]   = getPos(event.getActionCommand());
+        int delta[] = {selection[0], selection[1]};
 
         int i;
 
         if(isSelection) {
-            if(pos[0] == xSelection && pos[1] == ySelection)
+            if(pos[0] == selection[0] && pos[1] == selection[1])
                 selectPlayerMovement();
             else {
                 if(state[pos[0]][pos[1]] == -P[playerTurn]) {
@@ -121,7 +121,7 @@ public class DameFrame implements ActionListener {
                         }
                     }
                 }
-                move(xSelection, ySelection, pos[0], pos[1]);
+                move(selection[0], selection[1], pos[0], pos[1]);
                 flipTurn();
                 selectPlayerMovement();
             }
@@ -131,8 +131,8 @@ public class DameFrame implements ActionListener {
             isSelection = true;
         }
 
-        xSelection = pos[0];
-        ySelection = pos[1];
+        selection[0] = pos[0];
+        selection[1] = pos[1];
     }
 
     private void move(int xi, int yi, int xf, int yf) {
@@ -153,19 +153,81 @@ public class DameFrame implements ActionListener {
 
     private void selectPossibleMovement(int x, int y) {
         int i, j;
+        int delta[] = new int[2];
 
         for(i = 0; i < X; i++) {
             for(j = 0; j < Y; j++) {
-                if((i == x-1*P[playerTurn]) &&
-                  ((j == y-1) || (j == y+1)) &&
-                  state[i][j] != P[playerTurn])
-                    button[i][j].setEnabled(true);
-                else
+                delta[0] = x;
+                delta[1] = y;
+
+                if(isVertical(y, j) &&
+                   isHorizontal(x, i) &&
+                  !isAlly(i, j))
+                {
+                    if(isEnnemy(i, j) &&
+                       isBlocked(x, y, i, j))
+                    {
+                        button[i][j].setEnabled(false);
+                    } else
+                        button[i][j].setEnabled(true);
+                } else
                     button[i][j].setEnabled(false);
             }
         }
 
         button[x][y].setEnabled(true);
+    }
+
+    private boolean isBlocked(int x, int y, int i, int j) {
+        int delta[] = {x, y};
+        int next[]  = {i, j};
+        int block[] = new int[2];
+
+        int k;
+
+        for(k = 0; k < 2; k++) {
+            delta[k] -= next[k];
+
+            block[k] = next[k]-delta[k];
+        }
+
+        // it is blocked if it is out of bound
+        if((block[0] < 0 || block[0] >= X) ||
+           (block[1] < 0 || block[1] >= Y)) {
+            return true;
+        } else if(state[block[0]][block[1]] != BL)
+            return true;
+
+        return false;
+    }
+
+    private boolean isAlly(int x, int y) {
+        if(state[x][y] == P[playerTurn])
+            return true;
+
+        return false;
+    }
+
+    private boolean isEnnemy(int x, int y) {
+        if(state[x][y] != P[playerTurn] &&
+           state[x][y] != BL)
+            return true;
+
+        return false;
+    }
+
+    private boolean isVertical(int y, int yv) {
+        if((yv == y-1) || (yv == y+1))
+            return true;
+
+        return false;
+    }
+
+    private boolean isHorizontal(int x, int xh) {
+        if(xh == x-1*P[playerTurn])
+            return true;
+
+        return false;
     }
 
     public void selectPlayerMovement() {
