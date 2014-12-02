@@ -43,7 +43,7 @@ public class DameFrame implements ActionListener {
             for(j = 0; j < Y; j++) {
                 king[i][j] = false;
                 switch(i) {
-                //case 0:
+                case 0:
                 case 2:
                     if(j%2 == 0)
                         state[i][j] = P[0];
@@ -53,7 +53,7 @@ public class DameFrame implements ActionListener {
                         state[i][j] = P[0];
                     break;
 
-            //    case Y-1:
+                case Y-1:
                 case Y-3:
                     if(j%2 == 1)
                         state[i][j] = P[1];
