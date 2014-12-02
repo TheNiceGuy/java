@@ -21,10 +21,9 @@ public class DameFrame implements ActionListener {
 
     private boolean isSelection = false;
     private boolean king[][]    = new boolean[X][Y];
-    private int state[][]   = new int[X][Y];
-    private int playerTurn  = 0;
-    private int selection[] = new int[2];
-    private int lastToken[] = new int[2];
+    private int state[][]       = new int[X][Y];
+    private int playerTurn      = 0;
+    private int selection[]     = new int[2];
 
     private String iconToken[] = new String[2];
     private String kingToken[] = new String[2];
@@ -86,7 +85,7 @@ public class DameFrame implements ActionListener {
                 button[i][j].addActionListener(this);
 
                 if(state[i][j] == P[0])
-                    button[i][j].setIcon(new ImageIcon(kingToken[0]));
+                    button[i][j].setIcon(new ImageIcon(iconToken[0]));
                 else if(state[i][j] == P[1])
                     button[i][j].setIcon(new ImageIcon(iconToken[1]));
 
@@ -152,22 +151,23 @@ public class DameFrame implements ActionListener {
     }
 
     private void move(int xi, int yi, int xf, int yf) {
+        king[xf][yf] = king[xi][yi];
+        king[xi][yi] = false;
+
+        if(xf == 0 || xf == X-1) {
+            king[xf][yf] = true;
+            System.out.println("LE KING INCOMING");
+        }
+
         state[xf][yf] = state[xi][yi];
         state[xi][yi] = BL;
 
-        king[xi][yi] = king[xi][yi];
-        king[xi][yi] = false;
-
         button[xi][yi].setIcon(null);
-        button[xf][yf].setIcon(new ImageIcon(iconToken[playerTurn]));
+        if(king[xf][yf])
+            button[xf][yf].setIcon(new ImageIcon(kingToken[playerTurn]));
+        else
+            button[xf][yf].setIcon(new ImageIcon(iconToken[playerTurn]));
 
-        lastToken[0] = xf;
-        lastToken[1] = yf;
-
-        if(xf == 0 || xf == X-1) {
-            king[xi][yi] = true;
-            System.out.println("LE KING INCOMING");
-        }
     }
 
     private void killToken(int x, int y) {
@@ -184,19 +184,18 @@ public class DameFrame implements ActionListener {
         free = true;
         for(i = 0; i < X; i++) {
             for(j = 0; j < Y; j++) {
-                if(isVertical(y, j)   &&
-                   isHorizontal(x, i) &&
-                   isMoveable(x, y)   &&
+                if(isVertical(y, j)      &&
+                   isHorizontal(x, y, i) &&
+                   isMoveable(x, y)      &&
                    isEnnemy(i, j))
                 {
                     unselectBlank();
-                    free = false;
                     button[i][j].setEnabled(true);
-                    System.out.print("MOVE FAGGOT");
+                    free = false;
                 }
-                else if(isVertical(y, j)   &&
-                        isHorizontal(x, i) &&
-                       !isAlly(i, j)       &&
+                else if(isVertical(y, j)      &&
+                        isHorizontal(x, y, i) &&
+                       !isAlly(i, j)          &&
                         free)
                 {
                     if(isEnnemy(i, j) &&
@@ -281,10 +280,10 @@ public class DameFrame implements ActionListener {
 
         for(i = 0; i < X; i++) {
             for(j = 0; j < Y; j++) {
-                if(isVertical(y, j)   &&
-                   isHorizontal(x, i) &&
-                  !isAlly(i, j)       &&
-                  !isBlank(i, j)      &&
+                if(isVertical(y, j)      &&
+                   isHorizontal(x, y, i) &&
+                  !isAlly(i, j)          &&
+                  !isBlank(i, j)         &&
                   !isBlocked(x, y, i, j))
                 {
                         return true;
@@ -347,11 +346,10 @@ public class DameFrame implements ActionListener {
         return false;
     }
 
-    private boolean isHorizontal(int x, int xh) {
-        if(king[lastToken[0]][lastToken[1]] == true)
-            System.out.println("LE SAVIOR INCOMING");
-
-        if(xh == x-1*P[playerTurn])
+    private boolean isHorizontal(int x, int y, int xh) {
+        if(king[x][y] && (xh == x-1 || xh == x+1))
+            return true;
+        else if(xh == x-1*P[playerTurn])
             return true;
 
         return false;
