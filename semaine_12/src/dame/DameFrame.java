@@ -27,6 +27,7 @@ public class DameFrame implements ActionListener {
     private int lastToken[] = new int[2];
 
     private String iconToken[] = new String[2];
+    private String kingToken[] = new String[2];
 
     public DameFrame() {
     }
@@ -36,12 +37,14 @@ public class DameFrame implements ActionListener {
 
         iconToken[0] = "img/doritos_50x50.png";
         iconToken[1] = "img/dew_50x50.png";
+        kingToken[0] = "img/doritosbag_50x50.png";
+        kingToken[1] = "img/dewcan_50x50.png";
 
         for(i = 0; i < X; i++)
             for(j = 0; j < Y; j++) {
                 king[i][j] = false;
                 switch(i) {
-                case 0:
+                //case 0:
                 case 2:
                     if(j%2 == 0)
                         state[i][j] = P[0];
@@ -51,7 +54,7 @@ public class DameFrame implements ActionListener {
                         state[i][j] = P[0];
                     break;
 
-                case Y-1:
+            //    case Y-1:
                 case Y-3:
                     if(j%2 == 1)
                         state[i][j] = P[1];
@@ -83,7 +86,7 @@ public class DameFrame implements ActionListener {
                 button[i][j].addActionListener(this);
 
                 if(state[i][j] == P[0])
-                    button[i][j].setIcon(new ImageIcon(iconToken[0]));
+                    button[i][j].setIcon(new ImageIcon(kingToken[0]));
                 else if(state[i][j] == P[1])
                     button[i][j].setIcon(new ImageIcon(iconToken[1]));
 
@@ -106,9 +109,11 @@ public class DameFrame implements ActionListener {
         int i;
 
         if(isSelection) {
-            if(pos[0] == selection[0] && pos[1] == selection[1])
-                selectPlayerMovement();
-            else {
+            if(pos[0] == selection[0] && pos[1] == selection[1]) {
+                unselectAll();
+                if(findMoveable() == false)
+                    selectPlayerMovement();
+            } else {
                 if(state[pos[0]][pos[1]] == -P[playerTurn]) {
                     killToken(pos[0],pos[1]);
                     for(i = 0; i < 2; i++) {
@@ -120,17 +125,20 @@ public class DameFrame implements ActionListener {
 
                     move(selection[0], selection[1], pos[0], pos[1]);
                     if(isMoveable(pos[0], pos[1])) {
-                        selectMoveable(pos[0], pos[1]);
+                        unselectAll();
+                        select(pos[0], pos[1]);
                     } else {
                         flipTurn();
-                        selectPlayerMovement();
-                        findMoveable();
+                        unselectAll();
+                        if(findMoveable() == false)
+                            selectPlayerMovement();
                     }
                 } else {
                     move(selection[0], selection[1], pos[0], pos[1]);
                     flipTurn();
-                    selectPlayerMovement();
-                    findMoveable();
+                    unselectAll();
+                    if(findMoveable() == false)
+                        selectPlayerMovement();
                 }
             }
             isSelection = false;
@@ -155,6 +163,11 @@ public class DameFrame implements ActionListener {
 
         lastToken[0] = xf;
         lastToken[1] = yf;
+
+        if(xf == 0 || xf == X-1) {
+            king[xi][yi] = true;
+            System.out.println("LE KING INCOMING");
+        }
     }
 
     private void killToken(int x, int y) {
@@ -164,35 +177,34 @@ public class DameFrame implements ActionListener {
         button[x][y].setIcon(null);
     }
 
-    private void findMoveable() {
-        int i, j;
-
-        for(i = 0; i < X; i++) {
-            for(j = 0; j < Y; j++) {
-                if(state[i][j] == P[playerTurn])
-                    if(isMoveable(i, j)) {
-                        selectMoveable(i, j);
-                        break;
-                }
-            }
-        }
-    }
-
     private void selectPossibleMovement(int x, int y) {
+        boolean free;
         int i, j;
 
-
+        free = true;
         for(i = 0; i < X; i++) {
             for(j = 0; j < Y; j++) {
                 if(isVertical(y, j)   &&
                    isHorizontal(x, i) &&
-                  !isAlly(i, j))
+                   isMoveable(x, y)   &&
+                   isEnnemy(i, j))
+                {
+                    unselectBlank();
+                    free = false;
+                    button[i][j].setEnabled(true);
+                    System.out.print("MOVE FAGGOT");
+                }
+                else if(isVertical(y, j)   &&
+                        isHorizontal(x, i) &&
+                       !isAlly(i, j)       &&
+                        free)
                 {
                     if(isEnnemy(i, j) &&
                        isBlocked(x, y, i, j))
                     {
                         button[i][j].setEnabled(false);
                     } else
+
                         button[i][j].setEnabled(true);
                 } else
                     button[i][j].setEnabled(false);
@@ -202,17 +214,85 @@ public class DameFrame implements ActionListener {
         button[x][y].setEnabled(true);
     }
 
-    private void selectMoveable(int x, int y) {
+    public void selectPlayerMovement() {
         int i, j;
 
         for(i = 0; i < X; i++) {
             for(j = 0; j < Y; j++) {
-                if(i == x && j == y)
-                    button[i][j].setEnabled(true);
-                else
+                if(state[i][j] != P[playerTurn])
                     button[i][j].setEnabled(false);
+                else
+                    button[i][j].setEnabled(true);
             }
         }
+    }
+
+    private void flipTurn() {
+        playerTurn = (playerTurn==0?1:0);
+    }
+
+    private boolean findMoveable() {
+        boolean cond;
+        int i, j;
+
+        cond = false;
+        for(i = 0; i < X; i++) {
+            for(j = 0; j < Y; j++) {
+                if(state[i][j] == P[playerTurn])
+                    if(isMoveable(i, j)) {
+                        cond = true;
+                        select(i, j);
+                }
+            }
+        }
+
+        return cond;
+    }
+
+    private void unselectAll() {
+        int i, j;
+
+        for(i = 0; i < X; i++)
+            for(j = 0; j < Y; j++)
+                button[i][j].setEnabled(false);
+    }
+
+    private void unselectBlank() {
+        int i, j;
+
+        for(i = 0; i < X; i++)
+            for(j = 0; j < Y; j++)
+                if(state[i][j] == BL)
+                    button[i][j].setEnabled(false);
+    }
+
+    private void select(int x, int y) {
+        int i, j;
+
+        for(i = 0; i < X; i++)
+            for(j = 0; j < Y; j++)
+                if(i == x && j == y)
+                    button[i][j].setEnabled(true);
+    }
+
+    private boolean isMoveable(int x, int y) {
+        boolean cond;
+        int i, j;
+
+        for(i = 0; i < X; i++) {
+            for(j = 0; j < Y; j++) {
+                if(isVertical(y, j)   &&
+                   isHorizontal(x, i) &&
+                  !isAlly(i, j)       &&
+                  !isBlank(i, j)      &&
+                  !isBlocked(x, y, i, j))
+                {
+                        return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     private boolean isBlocked(int x, int y, int i, int j) {
@@ -268,43 +348,13 @@ public class DameFrame implements ActionListener {
     }
 
     private boolean isHorizontal(int x, int xh) {
+        if(king[lastToken[0]][lastToken[1]] == true)
+            System.out.println("LE SAVIOR INCOMING");
+
         if(xh == x-1*P[playerTurn])
             return true;
 
         return false;
-    }
-
-    private boolean isMoveable(int x, int y) {
-        boolean cond;
-        int i, j;
-
-        for(i = 0; i < X; i++) {
-            for(j = 0; j < Y; j++) {
-                if(isVertical(y, j)   &&
-                   isHorizontal(x, i) &&
-                  !isAlly(i, j)       &&
-                  !isBlank(i, j)      &&
-                  !isBlocked(x, y, i, j))
-                {
-                        return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    public void selectPlayerMovement() {
-        int i, j;
-
-        for(i = 0; i < X; i++) {
-            for(j = 0; j < Y; j++) {
-                if(state[i][j] != P[playerTurn])
-                    button[i][j].setEnabled(false);
-                else
-                    button[i][j].setEnabled(true);
-            }
-        }
     }
 
     private int[] getPos(String cmd) {
@@ -314,9 +364,5 @@ public class DameFrame implements ActionListener {
         pos[1] = Integer.parseInt(""+cmd.charAt(1));
 
         return pos;
-    }
-
-    private void flipTurn() {
-        playerTurn = (playerTurn==0?1:0);
     }
 }
