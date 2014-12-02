@@ -20,6 +20,7 @@ public class DameFrame implements ActionListener {
     private JButton button[][] = new JButton[X][Y];
 
     private boolean isSelection = false;
+    private boolean king[][]    = new boolean[X][Y];
     private int state[][]   = new int[X][Y];
     private int playerTurn  = 0;
     private int selection[] = new int[2];
@@ -38,6 +39,7 @@ public class DameFrame implements ActionListener {
 
         for(i = 0; i < X; i++)
             for(j = 0; j < Y; j++) {
+                king[i][j] = false;
                 switch(i) {
                 case 0:
                 case 2:
@@ -114,16 +116,22 @@ public class DameFrame implements ActionListener {
                         delta[i] *= -1;
 
                         pos[i] += delta[i];
-                        if(pos[i] < 0)
-                            pos[i] *= -1;
-                        else if(pos[i] >= S[i]) {
-                            pos[i] -= 2;
-                        }
                     }
+
+                    move(selection[0], selection[1], pos[0], pos[1]);
+                    if(isMoveable(pos[0], pos[1])) {
+                        selectMoveable(pos[0], pos[1]);
+                    } else {
+                        flipTurn();
+                        selectPlayerMovement();
+                        findMoveable();
+                    }
+                } else {
+                    move(selection[0], selection[1], pos[0], pos[1]);
+                    flipTurn();
+                    selectPlayerMovement();
+                    findMoveable();
                 }
-                move(selection[0], selection[1], pos[0], pos[1]);
-                flipTurn();
-                selectPlayerMovement();
             }
             isSelection = false;
         } else {
@@ -139,9 +147,14 @@ public class DameFrame implements ActionListener {
         state[xf][yf] = state[xi][yi];
         state[xi][yi] = BL;
 
-        button[xi][yi].setIcon(null);
+        king[xi][yi] = king[xi][yi];
+        king[xi][yi] = false;
 
+        button[xi][yi].setIcon(null);
         button[xf][yf].setIcon(new ImageIcon(iconToken[playerTurn]));
+
+        lastToken[0] = xf;
+        lastToken[1] = yf;
     }
 
     private void killToken(int x, int y) {
@@ -151,16 +164,27 @@ public class DameFrame implements ActionListener {
         button[x][y].setIcon(null);
     }
 
-    private void selectPossibleMovement(int x, int y) {
+    private void findMoveable() {
         int i, j;
-        int delta[] = new int[2];
 
         for(i = 0; i < X; i++) {
             for(j = 0; j < Y; j++) {
-                delta[0] = x;
-                delta[1] = y;
+                if(state[i][j] == P[playerTurn])
+                    if(isMoveable(i, j)) {
+                        selectMoveable(i, j);
+                        break;
+                }
+            }
+        }
+    }
 
-                if(isVertical(y, j) &&
+    private void selectPossibleMovement(int x, int y) {
+        int i, j;
+
+
+        for(i = 0; i < X; i++) {
+            for(j = 0; j < Y; j++) {
+                if(isVertical(y, j)   &&
                    isHorizontal(x, i) &&
                   !isAlly(i, j))
                 {
@@ -176,6 +200,19 @@ public class DameFrame implements ActionListener {
         }
 
         button[x][y].setEnabled(true);
+    }
+
+    private void selectMoveable(int x, int y) {
+        int i, j;
+
+        for(i = 0; i < X; i++) {
+            for(j = 0; j < Y; j++) {
+                if(i == x && j == y)
+                    button[i][j].setEnabled(true);
+                else
+                    button[i][j].setEnabled(false);
+            }
+        }
     }
 
     private boolean isBlocked(int x, int y, int i, int j) {
@@ -201,6 +238,13 @@ public class DameFrame implements ActionListener {
         return false;
     }
 
+    private boolean isBlank(int x, int y) {
+        if(state[x][y] == BL)
+            return true;
+
+        return false;
+    }
+
     private boolean isAlly(int x, int y) {
         if(state[x][y] == P[playerTurn])
             return true;
@@ -209,7 +253,7 @@ public class DameFrame implements ActionListener {
     }
 
     private boolean isEnnemy(int x, int y) {
-        if(state[x][y] != P[playerTurn] &&
+        if(state[x][y] == -P[playerTurn] &&
            state[x][y] != BL)
             return true;
 
@@ -226,6 +270,26 @@ public class DameFrame implements ActionListener {
     private boolean isHorizontal(int x, int xh) {
         if(xh == x-1*P[playerTurn])
             return true;
+
+        return false;
+    }
+
+    private boolean isMoveable(int x, int y) {
+        boolean cond;
+        int i, j;
+
+        for(i = 0; i < X; i++) {
+            for(j = 0; j < Y; j++) {
+                if(isVertical(y, j)   &&
+                   isHorizontal(x, i) &&
+                  !isAlly(i, j)       &&
+                  !isBlank(i, j)      &&
+                  !isBlocked(x, y, i, j))
+                {
+                        return true;
+                }
+            }
+        }
 
         return false;
     }
