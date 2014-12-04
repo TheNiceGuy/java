@@ -3,8 +3,7 @@ package dame;
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
-import sun.audio.*;
-import java.io.*;
+import java.net.URL;
 
 public class DameFrame implements ActionListener {
     final private String NOM = "MLG Dame";
@@ -25,8 +24,8 @@ public class DameFrame implements ActionListener {
     private int playerTurn      = 0;
     private int selection[]     = new int[2];
 
-    private String iconToken[] = new String[2];
-    private String kingToken[] = new String[2];
+    private URL iconToken[] = new URL[2];
+    private URL kingToken[] = new URL[2];
 
     public DameFrame() {
     }
@@ -34,10 +33,10 @@ public class DameFrame implements ActionListener {
     public void init() {
         int i, j;
 
-        iconToken[0] = "img/doritos_50x50.png";
-        iconToken[1] = "img/dew_50x50.png";
-        kingToken[0] = "img/doritosbag_50x50.png";
-        kingToken[1] = "img/dewcan_50x50.png";
+        iconToken[0] = getClass().getResource("/resources/img/doritos_50x50.png");
+        iconToken[1] = getClass().getResource("/resources/img/dew_50x50.png");
+        kingToken[0] = getClass().getResource("/resources/img/doritosbag_50x50.png");
+        kingToken[1] = getClass().getResource("/resources/img/dewcan_50x50.png");
 
         for(i = 0; i < X; i++)
             for(j = 0; j < Y; j++) {
