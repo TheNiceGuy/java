@@ -7,13 +7,13 @@ PACKAGE=file
 all: $(EXEC)
 
 $(EXEC):
-	$(JAVAC) $(JFLAGS) *.java
+	$(JAVAC) $(JFLAGS) $(PACKAGE)/*.java
 
-run:
-	java -cp .. $(PACKAGE).$(EXEC)
+run: build
+	java -jar $(EXEC).jar
 
 build: $(EXEC)
-	jar -cf $(EXEC).jar myApp
+	jar -cfvm $(EXEC).jar manifest $(PACKAGE)/*.class
 
 clean:
 	rm -rf *.class
