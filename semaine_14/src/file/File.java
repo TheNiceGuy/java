@@ -62,8 +62,12 @@ public class File {
 
                 log("Le caractère '"+input+"' vient d'être ajouté à la file.");
                 break;
+            default:
+                choix = 0;
             }
         } while(choix != 0);
+
+        System.exit(0);
     }
 
     // fonction qui obtient un caractère de l'utilisateur
