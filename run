@@ -23,8 +23,30 @@ PROJECT=$1
 PACKAGE=$2
 FILE=$3
 
+# arg 1: file (-f) or directory (-d)
+# arg 2: directory to search
+# arg 3: type to list
+function list {
+	cd $2
+
+	echo -e "\nPlease choose a $3 between these:"
+
+	if [[ $1 == -d ]]; then
+		for DIRECTORY in */ ; do
+			echo -e "   **\t$DIRECTORY" | rev | cut -c 2- | rev
+		done
+	elif [[ $1 == -f ]]; then
+		for FILE in *.java ; do
+			echo -e "   **\t$FILE" | rev | cut -c 6- | rev
+		done
+	fi
+
+	cd $DIR
+}
+
 if [[ ! -d $PROJECT ]]; then
 	echo "ERROR: The specified project doesn't exist."
+	list -d ./ package
 	exit 1
 fi
 
@@ -34,6 +56,7 @@ fi
 
 if [[ ! -d $PROJECT/src/$PACKAGE ]]; then
 	echo "ERROR: The specified package doesn't exist."
+	list -d $PROJECT/src/ project
 	exit 1
 fi
 
@@ -52,6 +75,7 @@ elif [[ -f $PROJECT/src/$PACKAGE/$FILE.java ]]; then
 	java -cp ./$PROJECT/src/ $PACKAGE.$FILE main
 else
 	echo "ERROR: The specified file doesn't exist."
+	list -f $PROJECT/src/$PACKAGE/ file
 fi
 
 exit 0
