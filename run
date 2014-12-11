@@ -21,7 +21,7 @@
 DIR=$(pwd)
 PROJECT=$1
 PACKAGE=$2
-FILE=$3
+OPTS=$3
 
 # arg 1: file (-f) or directory (-d)
 # arg 2: directory to search
@@ -44,22 +44,33 @@ function list {
 	cd $DIR
 }
 
-if [[ ! -d $PROJECT ]]; then
+# project related error checking
+if [[ ! -n $PROJECT ]]; then
+	echo "ERROR: No project specified."
+	list -d ./ project
+	exit 1
+elif [[ ! -d $PROJECT ]]; then
 	echo "ERROR: The specified project doesn't exist."
 	list -d ./ project
 	exit 1
 fi
 
-if [[ $2 == '-' ]]; then
+# package related error checking
+if [[ ! -n $PACKAGE ]]; then
+	echo "ERROR: No package specified."
+	list -d ./$PROJECT/src/ project
+	exit 1
+elif [[ $PACKAGE == '-' ]]; then
 	PACKAGE=$PROJECT
 fi
 
 if [[ ! -d $PROJECT/src/$PACKAGE ]]; then
 	echo "ERROR: The specified package doesn't exist."
-	list -d $PROJECT/src/ package
+	list -d ./$PROJECT/src/ package
 	exit 1
 fi
 
+# file related error checking and run them
 if [[ -f $PROJECT/src/$PACKAGE/makefile ]]; then
 	cd $PROJECT/src/$PACKAGE
 
@@ -70,9 +81,12 @@ if [[ -f $PROJECT/src/$PACKAGE/makefile ]]; then
 	fi
 
 	cd $DIR
-elif [[ -f $PROJECT/src/$PACKAGE/$FILE.java ]]; then
-	javac -encoding utf8 -verbose -deprecation ./$PROJECT/src/$PACKAGE/$FILE.java
-	java -cp ./$PROJECT/src/ $PACKAGE.$FILE main
+elif [[ ! -n $OPTS ]]; then
+	echo "ERROR: No file specified."
+	list -f $PROJECT/src/$PACKAGE/ file
+elif [[ -f $PROJECT/src/$PACKAGE/$OPTS.java ]]; then
+	javac -encoding utf8 -verbose -deprecation ./$PROJECT/src/$PACKAGE/$OPTS.java
+	java -cp ./$PROJECT/src/ $PACKAGE.$OPTS main
 else
 	echo "ERROR: The specified file doesn't exist."
 	list -f $PROJECT/src/$PACKAGE/ file
